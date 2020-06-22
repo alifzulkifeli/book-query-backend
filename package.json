@@ -1,18 +1,24 @@
 {
-  "name": "book-query-backend",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "cheerio": "^1.0.0-rc.3",
-    "express": "^4.17.1",
-    "morgan": "^1.10.0",
-    "nodemon": "^2.0.4",
-    "request": "^2.88.2"
-  }
+	"name": "book-query-backend",
+	"version": "1.0.0",
+	"description": "",
+	"main": "index.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"start": "node app.js"
+	},
+	"engines": {
+		"node": "12.16.2"
+	},
+	"author": "",
+	"license": "ISC",
+	"dependencies": {
+		"cheerio": "^1.0.0-rc.3",
+		"compression": "^1.7.4",
+		"express": "^4.17.1",
+		"helmet": "^3.23.1",
+		"morgan": "^1.10.0",
+		"nodemon": "^2.0.4",
+		"request": "^2.88.2"
+	}
 }
