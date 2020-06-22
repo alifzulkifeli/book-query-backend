@@ -8,37 +8,10 @@ const morgan = require("morgan");
 app.use(express.json());
 app.use(morgan("tiny"));
 
-app.get("/", (req, res) => {
-	res.send("cool");
-});
-
-app.get("/get-books", (req, res) => {});
-
 app.post("/get-books", async (req, res) => {
-	// const result = await pdfBanks(req.body.q);
-	// res.send(result);
-	url = `http://en.bookfi.net/s/?q=linear+algebra&t=0`;
-	const pdfdrive = [];
-	request(url, function (error, response, html) {
-		if (!error) {
-			const $ = cheerio.load(html);
-			$(".resItemBox.exactMatch").each((i, el) => {
-				if (i < 20) {
-					console.log($("h3").text(), i);
-				}
-
-				// const item = {
-				// 	name: $(el).find("h2").text(),
-				// 	page: $(el).find(".fi-pagecount ").text(),
-				// 	size: $(el).find(".fi-size.hidemobile ").text(),
-				// 	link:
-				// 		"https://www.pdfdrive.com" + $(el).find(".ai-search").attr("href"),
-				// };
-				// pdfdrive.push(item);
-			});
-		}
-		return pdfdrive;
-	});
+	const pdfdrive = await pdfBanks(req.body.q);
+	const bookFi = await bookFii(req.body.q);
+	res.send({ pdfdrive, bookFi });
 });
 
 app.listen(3000, () => {
@@ -65,6 +38,28 @@ function pdfBanks(q) {
 				});
 			}
 			resolve(pdfdrive);
+		});
+	});
+}
+function bookFii(q) {
+	return new Promise((resolve, reject) => {
+		url = `http://en.bookfi.net/s/?q=${q}&t=0`;
+		const bookFi = [];
+		request(url, function (error, response, html) {
+			if (!error) {
+				const $ = cheerio.load(html);
+				$(".resItemBox.exactMatch").each((i, el) => {
+					const item = {
+						name: $(el).find("h3").html(),
+						fileType: $(el).find(".ddownload.color2").html().slice(10, 20),
+						author: $(el).find("a").next().html(),
+						sizeAndLang: $(el).find(".actionsHolder").children().next().text(),
+						link: "http://en.bookfi.net/" + $(el).find("a").attr("href"),
+					};
+					if (i < 20) bookFi.push(item);
+				});
+			}
+			resolve(bookFi);
 		});
 	});
 }
