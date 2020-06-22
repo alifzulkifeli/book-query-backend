@@ -12,6 +12,10 @@ app.use(helmet());
 app.use(compression());
 app.use(morgan("tiny"));
 
+app.get("/", (req, res) => {
+	res.send("hello");
+});
+
 app.post("/get-books", async (req, res) => {
 	const pdfdrive = await pdfBanks(req.body.q);
 	const bookFi = await bookFii(req.body.q);
