@@ -16,9 +16,9 @@ app.get("/", (req, res) => {
 	res.send("hello");
 });
 
-app.post("/get-books", async (req, res) => {
-	const pdfdrive = await pdfBanks(req.body.q);
-	const bookFi = await bookFii(req.body.q);
+app.get("/get-books/:q", async (req, res) => {
+	const pdfdrive = await pdfBanks(req.params.q);
+	const bookFi = await bookFii(req.params.q);
 	res.send({ pdfdrive, bookFi });
 });
 
